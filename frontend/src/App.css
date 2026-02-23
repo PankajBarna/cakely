@@ -1,0 +1,28 @@
+.App {
+  min-height: 100vh;
+}
+
+/* Prevent layout shifts */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Focus styles for accessibility */
+:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+/* Smooth transitions for interactive elements */
+a,
+button {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Container max-width utility */
+.container-lg {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
