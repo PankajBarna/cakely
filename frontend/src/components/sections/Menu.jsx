@@ -105,7 +105,7 @@ export const Menu = ({ showAll = false, hideHeader = false }) => {
 
       {/* Bottom Bar */}
       {cartItems.length > 0 && (
-        <div className="fixed bottom-4 left-0 right-0 z-50 px-4">
+        <div className=" bottom-0 mt-8 mb-4 left-0 right-0 z-50 px-4">
           <div className="max-w-3xl mx-auto bg-white rounded-2xl shadow-xl border border-border px-4 py-3 flex items-center justify-between">
             <div className="text-sm">
               <span className="font-semibold">
@@ -123,8 +123,15 @@ export const Menu = ({ showAll = false, hideHeader = false }) => {
             <Button
               className="rounded-full bg-primary hover:bg-accent text-white"
               onClick={() => {
-                navigate("/contact");
-                window.scrollTo({ top: 0, behavior: "smooth" });
+                const isFourPage = siteConfig.site.mode === "fourPage";
+
+                if (isFourPage) {
+                  navigate("/contact");
+                  return;
+                }
+
+                // onePage: just scroll to the order form section on Home
+                document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
               }}
             >
               Review Order
