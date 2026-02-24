@@ -41,7 +41,7 @@ export const OrderForm = () => {
   if (!sectionsConfig.orderForm) return null;
 
   const { orderForm } = siteConfig;
-  
+
 
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -141,55 +141,74 @@ export const OrderForm = () => {
                   <div
                     key={item.id}
                     data-testid={`cart-item-${item.id}`}
-                    className="flex items-center gap-4 bg-secondary rounded-xl p-4"
+                    className="bg-secondary rounded-xl p-4"
                   >
-                    <img
-                      src={item.image}
-                      alt={item.name}
-                      className="w-16 h-16 rounded-lg object-cover"
-                    />
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-foreground truncate">
-                        {item.name}
-                      </h4>
-                      <p className="text-sm text-primary font-semibold">
-                        From ₹{item.priceFrom.toLocaleString()}
-                      </p>
-                    </div>
+                    <div className='flex justify-between align-middle'>
+                      <div className='flex items-start gap-3'>
+                        <img
+                          src={item.image}
+                          alt={item.name}
+                          className="w-14 h-14 rounded-lg object-cover shrink-0"
+                        /></div>
 
-                    {/* Quantity Controls */}
-                    <div className="flex items-center gap-2">
+                      {/* Quantity Controls */}
+                      <div className="">
+                        <div className='flex items-center gap-2 shrink-0'>
+                          <button
+                            type="button"
+                            data-testid={`cart-decrease-${item.id}`}
+                            onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors"
+                          >
+                            <Minus className="w-4 h-4" />
+                          </button>
+
+                          <span className="w-6 text-center font-medium">
+                            {item.quantity}
+                          </span>
+
+                          <button
+                            type="button"
+                            data-testid={`cart-increase-${item.id}`}
+                            onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                            className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors"
+                          >
+                            <Plus className="w-4 h-4" />
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className='flex justify-between mt-2 align-middle'>
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-medium text-foreground leading-snug line-clamp-2">
+                          {item.name}
+                        </h4>
+                        <p className="text-sm text-primary font-semibold">
+                          From ₹{item.priceFrom.toLocaleString()}
+                        </p>
+                      </div>
+
+                      {/* Remove Button */}
                       <button
                         type="button"
-                        data-testid={`cart-decrease-${item.id}`}
-                        onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                        className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors"
+                        data-testid={`cart-remove-${item.id}`}
+                        onClick={() => removeItem(item.id)}
+                        className="p-2 text-muted-foreground hover:text-red-500 transition-colors shrink-0 align-top"
                       >
-                        <Minus className="w-4 h-4" />
-                      </button>
-                      <span className="w-8 text-center font-medium">
-                        {item.quantity}
-                      </span>
-                      <button
-                        type="button"
-                        data-testid={`cart-increase-${item.id}`}
-                        onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                        className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center hover:bg-primary hover:text-white hover:border-primary transition-colors"
-                      >
-                        <Plus className="w-4 h-4" />
+                        <div className='p-2 bg-red-100 rounded-full top-0'>
+                          <Trash2 className="w-5 h-5 text-red-400" />
+
+                        </div>
+
+                        {/* <div className='text-sm'>Remove</div> */}
                       </button>
                     </div>
 
-                    {/* Remove Button */}
-                    <button
-                      type="button"
-                      data-testid={`cart-remove-${item.id}`}
-                      onClick={() => removeItem(item.id)}
-                      className="p-2 text-muted-foreground hover:text-red-500 transition-colors"
-                    >
-                      <Trash2 className="w-5 h-5" />
-                    </button>
+
+
                   </div>
+
+                  // </div>
                 ))}
 
                 {/* Total Estimate */}
@@ -204,12 +223,32 @@ export const OrderForm = () => {
                 </p>
 
                 {/* Add More Items Button */}
-                <div className='flex justify-center sm:justify-end'>
+                <div className="flex justify-center sm:justify-end">
                   <Button
                     type="button"
                     variant="outline"
                     data-testid="add-more-items-btn"
-                    className="w-1/4 mt-4 rounded-full border-primary text-primary hover:bg-primary hover:text-white"
+                    className="mt-4 rounded-full border-primary text-primary hover:bg-primary hover:text-white
+               px-6 sm:px-5 w-auto sm:w-auto"
+                    onClick={() => {
+                      if (siteConfig.site.mode === "fourPage") {
+                        navigate("/menu");
+                        return;
+                      }
+                      document.getElementById("menu")?.scrollIntoView({ behavior: "smooth" });
+                    }}
+                  >
+                    <Plus className="w-4 h-4 mr-2" />
+                    Add More
+                  </Button>
+                </div>
+                {/* <div className='flex justify-center sm:justify-end'>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    data-testid="add-more-items-btn"
+                    className="mt-4 rounded-full border-primary text-primary hover:bg-primary hover:text-white
+               px-6 sm:px-5 w-auto sm:w-auto"
                     onClick={() => {
                       if (siteConfig.site.mode === "fourPage") {
                         navigate("/menu");
@@ -230,7 +269,7 @@ export const OrderForm = () => {
                     <Plus className="w-4 h-4 mr-2" />
                     Add More
                   </Button>
-                </div>
+                </div> */}
               </div>
             )}
           </div>
@@ -404,15 +443,23 @@ export const OrderForm = () => {
               type="submit"
               data-testid="order-form-submit"
               size="lg"
-              className="bg-primary hover:bg-accent text-white rounded-full px-10 py-6 text-base font-medium shadow-lg shadow-primary/30 transition-all hover:shadow-xl hover:shadow-primary/40"
+              className="w-full bg-primary hover:bg-accent text-white rounded-full px-6 py-6 text-base font-medium shadow-lg shadow-primary/30 transition-all hover:shadow-xl hover:shadow-primary/40"
             >
-              <MessageCircle className="w-5 h-5 mr-2" />
-              Send Order on WhatsApp
-              {cartItems.length > 0 && (
-                <span className="ml-2 px-2 py-0.5 bg-white/20 rounded-full text-sm">
-                  {cartItems.reduce((sum, item) => sum + item.quantity, 0)} items
+              <span className="flex items-center justify-center gap-2 min-w-0">
+                <MessageCircle className="w-5 h-5 shrink-0" />
+
+                {/* Text: truncate on tiny screens */}
+                <span className="min-w-0 truncate">
+                  Send Order on WhatsApp
                 </span>
-              )}
+
+                {/* Badge: never shrink, but only show on sm+ */}
+                {cartItems.length > 0 && (
+                  <span className="hidden sm:inline-flex ml-2 px-2 py-0.5 bg-white/20 rounded-full text-sm shrink-0">
+                    {cartItems.reduce((sum, item) => sum + item.quantity, 0)} items
+                  </span>
+                )}
+              </span>
             </Button>
             <p className="text-sm text-muted-foreground mt-4">
               Your order details will be sent to us via WhatsApp for confirmation
